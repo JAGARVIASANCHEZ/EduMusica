@@ -9,7 +9,32 @@
     android:gravity="center"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/USUARIO"/>
 
+    <GridLayout
+        android:id="@+id/answerGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <Button
+            android:id="@+id/btn_intervalo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/identifica_el_intervalo" />
+
+        <Button
+            android:id="@+id/btn_melodias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/identifica_la_melodia" />
+    </GridLayout>
 
 
     <Button
@@ -18,10 +43,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/cerrar_sesion"/>
-
-
-
-
-
 
 </LinearLayout>

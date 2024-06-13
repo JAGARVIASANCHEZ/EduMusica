@@ -12,4 +12,48 @@
     <string name="intervalos">Intervalos</string>
     <string name="identifica_nel_intervalo">Identifica\nel intervalo</string>
     <string name="identifica_nla_melodia">Identifica\nla melodia</string>
+    <string name="USUARIO">USUARIO</string>
+    <string name="identifica_el_intervalo">Identifica\nel intervalo</string>
+    <string name="identifica_la_melodia">Identifica\nla melodía</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="pregunta">Pregunta: 0/10</string>
+    <string name="puntuacion">Puntuación: 0</string>
+    <string name="melodia_1">Melodía 1</string>
+    <string name="melodia_2">Melodía 2</string>
+    <string name="melodia_3">Melodía 3</string>
+    <string name="melodia_4">Melodía 4</string>
+    <string name="resolver">Resolver</string>
+    <string name="imagen_melodia">Imagen de melodia</string>
+
+    <!-- Audio File Names -->
+    <string-array name="melody_audio_files">
+        <item>melody1</item>
+        <item>melody2</item>
+        <item>melody3</item>
+        <item>melody4</item>
+        <item>melody5</item>
+        <item>melody6</item>
+        <item>melody7</item>
+        <item>melody8</item>
+        <item>melody9</item>
+        <item>melody10</item>
+        <!-- Add more items as needed -->
+    </string-array>
+
+    <!-- Image File Names -->
+    <string-array name="melody_image_files">
+        <item>melody1</item>
+        <item>melody2</item>
+        <item>melody3</item>
+        <item>melody4</item>
+        <item>melody5</item>
+        <item>melody6</item>
+        <item>melody7</item>
+        <item>melody8</item>
+        <item>melody9</item>
+        <item>melody10</item>
+        <!-- Add more items as needed -->
+    </string-array>
+
+
 </resources>

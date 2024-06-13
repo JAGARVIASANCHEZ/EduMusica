@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
-    Button button;
+    Button btn_logout, btn_melodias, btn_intervalos;
 
     FirebaseUser user;
 
@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         auth = FirebaseAuth.getInstance();
-        button = findViewById(R.id.logout);
+        btn_logout = findViewById(R.id.logout);
+        btn_melodias = findViewById(R.id.btn_melodias);
+        btn_intervalos = findViewById(R.id.btn_intervalo);
 
         user = auth.getCurrentUser();
         if(user == null){
@@ -45,8 +47,25 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        btn_melodias.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), JuegoMelodias.class);
+                startActivity(intent);
+            }
+        });
+        btn_intervalos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), JuegoIntervalos.class);
+                startActivity(intent);
+            }
+        });
 
-        button.setOnClickListener(new View.OnClickListener() {
+
+
+
+        btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
