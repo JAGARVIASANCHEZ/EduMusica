@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">EduMusicav2</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="LOGIN">LOGIN</string>
+    <string name="register">Register</string>
+    <string name="REGISTER">REGISTER</string>
+    <string name="click_to_login">Click to login</string>
+    <string name="click_to_register">Click to register</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="intervalos">Intervalos</string>
+    <string name="identifica_nel_intervalo">Identifica\nel intervalo</string>
+    <string name="identifica_nla_melodia">Identifica\nla melodia</string>
+</resources>

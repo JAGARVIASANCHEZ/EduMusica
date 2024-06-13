@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "436100681215",
+    "project_id": "edumusicav2",
+    "storage_bucket": "edumusicav2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436100681215:android:4cb462d317c7f64b90ebca",
+        "android_client_info": {
+          "package_name": "com.example.edumusicav2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk-zDfCOeOaQ5PBVStqlNaU7qpVxjJLCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
