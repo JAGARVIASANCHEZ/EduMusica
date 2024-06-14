@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      *
-     * Muestra las puntuaciones máximas guardadas.
+     * Muestra lass puntuaciones máximas guardadas.
      */
     private void mostrarPuntacionesMax() {
 
