@@ -8,10 +8,11 @@
     android:layout_height="match_parent"
     android:padding="15dp"
     android:orientation="vertical"
-    tools:context=".Register">
+    tools:context=".Register"
+    >
 
     <TextView
-        android:text="@string/register"
+        android:text="@string/crear_cuenta"
         android:textSize="30sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -35,6 +36,17 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:hint="@string/password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/repassword"
+            android:hint="@string/repite_password"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -48,7 +60,7 @@
     <Button
         android:id="@+id/btn_register"
         android:layout_marginTop="20dp"
-        android:text="@string/REGISTER"
+        android:text="@string/crear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     
@@ -57,7 +69,7 @@
         android:layout_marginTop="20dp"
         android:textSize="20sp"
         android:gravity="center"
-        android:text="@string/click_to_login"
+        android:text="@string/volver_a_inicio_de_sesi_n"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

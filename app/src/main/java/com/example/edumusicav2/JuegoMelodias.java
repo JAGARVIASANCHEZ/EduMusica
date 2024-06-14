@@ -10,11 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class JuegoMelodias extends AppCompatActivity {
@@ -27,12 +25,10 @@ public class JuegoMelodias extends AppCompatActivity {
     private int correctMelody = -1;
     private int score = 0;
     private int questionCounter = 0;
-    private static final int TOTAL_QUESTIONS = 3;
+    public static final int TOTAL_QUESTIONS = 10;
 
     private List<Integer> melodyAudioIds;
     private List<Integer> melodyImageIds;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,50 +46,27 @@ public class JuegoMelodias extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
 
         loadMelodyResources();
-
         setNewQuestion();
 
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playMelody(0);
-                highlightButton(button1);
-            }
+        button1.setOnClickListener(v -> {
+            playMelody(0);
+            highlightButton(button1);
         });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playMelody(1);
-                highlightButton(button2);
-            }
+        button2.setOnClickListener(v -> {
+            playMelody(1);
+            highlightButton(button2);
         });
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playMelody(2);
-                highlightButton(button3);
-            }
+        button3.setOnClickListener(v -> {
+            playMelody(2);
+            highlightButton(button3);
         });
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playMelody(3);
-                highlightButton(button4);
-            }
+        button4.setOnClickListener(v -> {
+            playMelody(3);
+            highlightButton(button4);
         });
 
-        resolveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer();
-            }
-        });
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNewQuestion();
-            }
-        });
+        resolveButton.setOnClickListener(v -> checkAnswer());
+        nextButton.setOnClickListener(v -> setNewQuestion());
     }
 
     private void loadMelodyResources() {
@@ -122,30 +95,28 @@ public class JuegoMelodias extends AppCompatActivity {
     }
 
     private void setNewQuestion() {
-
         if (questionCounter >= TOTAL_QUESTIONS) {
-            endGame();
+            GameUtils.endGame(this, score, "Melodias");
             return;
         }
 
-        List<Integer> randomIndices = shuffleList(melodyAudioIds.size());
+        List<Integer> randomIndices = GameUtils.shuffleList(melodyAudioIds.size());
         correctMelody = randomIndices.get(0);
 
         melodyImage.setImageResource(melodyImageIds.get(correctMelody));
 
-        List<Integer> buttonTags = shuffleList(4);
+        List<Integer> buttonTags = GameUtils.shuffleList(4);
         button1.setTag(randomIndices.get(buttonTags.get(0)));
         button2.setTag(randomIndices.get(buttonTags.get(1)));
         button3.setTag(randomIndices.get(buttonTags.get(2)));
         button4.setTag(randomIndices.get(buttonTags.get(3)));
 
-        resetButtonStyles();
-        enableButtons(true);
+        GameUtils.resetButtonStyles(button1, button2, button3, button4);
+        GameUtils.enableButtons(true, button1, button2, button3, button4, resolveButton);
         nextButton.setEnabled(false);
         selectedMelody = -1;
         questionCounter++;
         questionCounterText.setText("Pregunta: " + questionCounter + "/" + TOTAL_QUESTIONS);
-
     }
 
     private void playMelody(int index) {
@@ -191,7 +162,7 @@ public class JuegoMelodias extends AppCompatActivity {
         }
 
         selectedButton.setBackgroundColor(isCorrect ? Color.GREEN : Color.RED);
-        Button correctButton = getButtonByTag(correctMelody);
+        Button correctButton = GameUtils.getButtonByTag(button1, button2, button3, button4, correctMelody);
         if (correctButton != null) {
             correctButton.setBackgroundColor(Color.GREEN);
         }
@@ -199,60 +170,16 @@ public class JuegoMelodias extends AppCompatActivity {
         if (isCorrect) {
             score++;
         }
-        scoreText.setText("Puntuación: " + score);
+        scoreText.setText("Puntuación: " + score + "/" + TOTAL_QUESTIONS);
 
-        enableButtons(false);
+        GameUtils.saveMaxScore(this, score, "Melodias");
+
+        GameUtils.enableButtons(false, button1, button2, button3, button4, resolveButton);
         nextButton.setEnabled(true);
     }
 
-    private Button getButtonByTag(int tag) {
-        if ((int) button1.getTag() == tag) {
-            return button1;
-        } else if ((int) button2.getTag() == tag) {
-            return button2;
-        } else if ((int) button3.getTag() == tag) {
-            return button3;
-        } else if ((int) button4.getTag() == tag) {
-            return button4;
-        }
-        return null;
-    }
-
-    private void enableButtons(boolean enable) {
-        button1.setEnabled(enable);
-        button2.setEnabled(enable);
-        button3.setEnabled(enable);
-        button4.setEnabled(enable);
-        resolveButton.setEnabled(enable);
-    }
-
     private void highlightButton(Button button) {
-        resetButtonStyles();
+        GameUtils.resetButtonStyles(button1, button2, button3, button4);
         button.setBackgroundColor(Color.BLUE);
-    }
-
-    private void resetButtonStyles() {
-        button1.setBackgroundColor(Color.LTGRAY);
-        button2.setBackgroundColor(Color.LTGRAY);
-        button3.setBackgroundColor(Color.LTGRAY);
-        button4.setBackgroundColor(Color.LTGRAY);
-    }
-
-    private List<Integer> shuffleList(int size) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            list.add(i);
-        }
-        Collections.shuffle(list);
-        return list;
-    }
-
-    private void endGame() {
-        enableButtons(false);
-        nextButton.setEnabled(false);
-        resolveButton.setEnabled(false);
-        Toast.makeText(this, "Juego terminado! Tu puntuación final es: " + score, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
     }
 }

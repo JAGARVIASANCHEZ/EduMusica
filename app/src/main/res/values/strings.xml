@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EduMusicav2</string>
+    <string name="app_name">EduMusica</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -24,6 +24,12 @@
     <string name="melodia_4">Melodía 4</string>
     <string name="resolver">Resolver</string>
     <string name="imagen_melodia">Imagen de melodia</string>
+    <string name="repite_password">Repite password</string>
+    <string name="crear_cuenta">Crear cuenta</string>
+    <string name="crear">CREAR</string>
+    <string name="volver_a_inicio_de_sesi_n">Volver a inicio de sesión</string>
+    <string name="iniciar_sesi_n">Iniciar sesión</string>
+    <string name="inicio_de_sesi_n">Inicio de sesión</string>
 
     <!-- Audio File Names -->
     <string-array name="melody_audio_files">
@@ -53,6 +59,28 @@
         <item>melody9</item>
         <item>melody10</item>
         <!-- Add more items as needed -->
+    </string-array>
+
+    <!-- Opciones de respuesta -->
+    <string-array name="respuestas_intervalos">
+        <item>Octava</item>
+        <item>Segunda mayor</item>
+        <item>Tercera mayor</item>
+        <item>Cuarta justa</item>
+        <item>Quinta justa</item>
+        <item>Sexta mayor</item>
+        <item>Séptima mayor</item>
+    </string-array>
+
+    <!-- Nombres de archivos de audio -->
+    <string-array name="audios_intervalos">
+        <item>octava</item>
+        <item>segunda_mayor</item>
+        <item>tercera_mayor</item>
+        <item>cuarta_justa</item>
+        <item>quinta_justa</item>
+        <item>sexta_mayor</item>
+        <item>septima_mayor</item>
     </string-array>
 
 

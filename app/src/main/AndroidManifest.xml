@@ -12,22 +12,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Material3.Light"
+        android:theme="@style/Theme.Material3.Light.NoActionBar"
+
         tools:targetApi="31">
         <activity
             android:name=".JuegoMelodias"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".JuegoIntervalos"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".Register"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+             />
         <activity
             android:name=".Login"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +39,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

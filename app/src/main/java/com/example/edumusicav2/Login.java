@@ -31,10 +31,11 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
+
+    //Al inicio de la app, comprobar que no hay un usuario logueado, en caso de que lo haya iniciar MainActivity
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -42,6 +43,8 @@ public class Login extends AppCompatActivity {
             finish();
         }
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +58,14 @@ public class Login extends AppCompatActivity {
         });
 
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();  //Instancia de usuario en FireBase
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.btn_login);
-        progressBar = findViewById(R.id.progressbar);
+        progressBar = findViewById(R.id.progressbar);  //Circunferencia de progreso para dar fluidez
         textView = findViewById(R.id.registerNow);
 
+        //Ir a Crear Cuenta
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +83,7 @@ public class Login extends AppCompatActivity {
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
+                //Comprobaciones si TextUtils están vacios
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(Login.this,"Enter email",Toast.LENGTH_SHORT).show();
                     return;
@@ -89,6 +94,7 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
+                //Llamada a loguearte con tu usuario
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -96,7 +102,7 @@ public class Login extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
 
-                                    Toast.makeText(getApplicationContext(),"Login Succesful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),"Sesion iniciada.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -104,7 +110,7 @@ public class Login extends AppCompatActivity {
 
                                 } else {
 
-                                    Toast.makeText(Login.this, "Authentication failed.",
+                                    Toast.makeText(Login.this, "Fallo en inicio de sesión",
                                             Toast.LENGTH_SHORT).show();
 
                                 }

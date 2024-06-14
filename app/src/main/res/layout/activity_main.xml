@@ -7,19 +7,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/background_image">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/settings_icon"
+            android:layout_width="55dp"
+            android:layout_height="57dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_settings" />
+    </RelativeLayout>
 
     <TextView
+        android:id="@+id/tv_max_score_melodias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/USUARIO"/>
+        android:text="Puntuación máxima de melodías: 0"/>
+
+    <TextView
+        android:id="@+id/tv_max_score_intervalos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Puntuación máxima de intervalos: 0"/>
 
     <GridLayout
         android:id="@+id/answerGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
         android:columnCount="2"
         android:rowCount="2">
 
@@ -36,12 +65,10 @@
             android:text="@string/identifica_la_melodia" />
     </GridLayout>
 
-
     <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/cerrar_sesion"/>
-
 </LinearLayout>
