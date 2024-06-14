@@ -83,7 +83,6 @@ public class JuegoMelodias extends AppCompatActivity {
      * Carga los recursos de melodías y sus imágenes correspondientes.
      */
     private void cargarRecursosMelodias() {
-
         Log.d(TAG, "Cargando recursos de melodías");
 
         Resources res = getResources();
@@ -108,6 +107,9 @@ public class JuegoMelodias extends AppCompatActivity {
                 idImagenMelodias.add(imageId);
             }
         }
+
+        Log.d(TAG, "Audio IDs: " + idAudiosMelodias.size());
+        Log.d(TAG, "Image IDs: " + idImagenMelodias.size());
     }
 
     /**
@@ -117,6 +119,11 @@ public class JuegoMelodias extends AppCompatActivity {
         Log.d(TAG, "Estableciendo nueva pregunta");
         if (contadorPreguntas >= TOTAL_PREGUNTAS) {
             GameUtils.finJuego(this, puntuacion, "Melodias");
+            return;
+        }
+
+        if (idAudiosMelodias.isEmpty() || idImagenMelodias.isEmpty()) {
+            Log.e(TAG, "Error: Las listas de melodías están vacías");
             return;
         }
 
@@ -145,7 +152,6 @@ public class JuegoMelodias extends AppCompatActivity {
      * @param index Índice del botón seleccionado.
      */
     private void repMelodia(int index) {
-
         Log.d(TAG, "Reproduciendo melodía del botón " + index);
 
         int melodia;
@@ -175,7 +181,6 @@ public class JuegoMelodias extends AppCompatActivity {
      * Verifica si la respuesta seleccionada es correcta y actualiza la puntuación.
      */
     private void checkRespuesta() {
-
         Log.d(TAG, "Verificando respuesta");
 
         if (melodiaElegida == -1) {
@@ -185,7 +190,11 @@ public class JuegoMelodias extends AppCompatActivity {
 
         boolean correcta;
 
-        correcta = melodiaElegida == melodyCorrecta;
+        if (melodiaElegida == melodyCorrecta) {
+            correcta = true;
+        } else {
+            correcta = false;
+        }
 
         Button btnElegido;
         if (melodiaElegida == (int) button1.getTag()) {

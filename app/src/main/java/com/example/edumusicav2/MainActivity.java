@@ -229,9 +229,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Mostrando puntuaciones máximas");
 
         SharedPreferences prefs = getSharedPreferences("Progress", MODE_PRIVATE); // Llamada a Progress.xml en sharedpref una vez más, para mostrar las puntuaciones máximas
-        int maxScoreMelodias = prefs.getInt("maxScoreMelodias", 0);
-        int maxScoreIntervalos = prefs.getInt("maxScoreIntervalos", 0);
-        tvMaxPuntMelodias.setText("Puntuación máxima de melodías: " + maxScoreMelodias + "/" + JuegoMelodias.TOTAL_PREGUNTAS);
-        tvMaxPuntIntervalos.setText("Puntuación máxima de intervalos: " + maxScoreIntervalos + "/" + JuegoIntervalos.TOTAL_PREGUNTAS);
+        int maxPuntuacionMelodias = prefs.getInt("maxPuntuacionMelodias", 0);
+        int maxPuntuacionIntervalos = prefs.getInt("maxPuntuacionIntervalos", 0);
+        tvMaxPuntMelodias.setText("Puntuación máxima de melodías: " + maxPuntuacionMelodias + "/" + JuegoMelodias.TOTAL_PREGUNTAS);
+        tvMaxPuntIntervalos.setText("Puntuación máxima de intervalos: " + maxPuntuacionIntervalos + "/" + JuegoIntervalos.TOTAL_PREGUNTAS);
     }
 }
