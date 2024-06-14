@@ -1,25 +1,39 @@
 package com.example.edumusicav2;
 
+
+/**
+ * Clase que representa una pregunta de intervalo musical.
+ */
 public class PreguntaIntervalo {
-    private String audioName;
-    private String[] choices;
-    private String correctAnswer;
+    private String nombreAudio;
+    private String[] opciones;
+    private String opcionCorrecta;
 
-    public PreguntaIntervalo(String audioName, String[] choices, String correctAnswer) {
-        this.audioName = audioName;
-        this.choices = choices;
-        this.correctAnswer = correctAnswer;
+
+    /**
+     * Constructor para crear una nueva pregunta de intervalo.
+     *
+     * @param audio     Nombre del archivo de audio del intervalo.
+     * @param arrayopciones       Opciones de respuesta para la pregunta.
+     * @param opcionCorrecta Respuesta correcta para la pregunta.
+     */
+    public PreguntaIntervalo(String audio, String[] arrayopciones, String opcionCorrecta) {
+        this.nombreAudio = audio;
+        this.opciones = arrayopciones;
+        this.opcionCorrecta = opcionCorrecta;
     }
 
-    public String getAudioName() {
-        return audioName;
+
+
+    public String getNombreAudio() {
+        return nombreAudio;
     }
 
-    public String[] getChoices() {
-        return choices;
+    public String[] getOpciones() {
+        return opciones;
     }
 
-    public String getCorrectAnswer() {
-        return correctAnswer;
+    public String getOpcionCorrecta() {
+        return opcionCorrecta;
     }
 }

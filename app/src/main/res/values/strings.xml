@@ -30,34 +30,35 @@
     <string name="volver_a_inicio_de_sesi_n">Volver a inicio de sesión</string>
     <string name="iniciar_sesi_n">Iniciar sesión</string>
     <string name="inicio_de_sesi_n">Inicio de sesión</string>
+    <string name="puntuaci_n_0">Puntuación: 0</string>
 
     <!-- Audio File Names -->
-    <string-array name="melody_audio_files">
-        <item>melody1</item>
-        <item>melody2</item>
-        <item>melody3</item>
-        <item>melody4</item>
-        <item>melody5</item>
-        <item>melody6</item>
-        <item>melody7</item>
-        <item>melody8</item>
-        <item>melody9</item>
-        <item>melody10</item>
+    <string-array name="audios_melodias">
+        <item>melodia1</item>
+        <item>melodia2</item>
+        <item>melodia3</item>
+        <item>melodia4</item>
+        <item>melodia5</item>
+        <item>melodia6</item>
+        <item>melodia7</item>
+        <item>melodia8</item>
+        <item>melodia9</item>
+        <item>melodia10</item>
         <!-- Add more items as needed -->
     </string-array>
 
     <!-- Image File Names -->
-    <string-array name="melody_image_files">
-        <item>melody1</item>
-        <item>melody2</item>
-        <item>melody3</item>
-        <item>melody4</item>
-        <item>melody5</item>
-        <item>melody6</item>
-        <item>melody7</item>
-        <item>melody8</item>
-        <item>melody9</item>
-        <item>melody10</item>
+    <string-array name="imagenes_melodias">
+        <item>melodia1</item>
+        <item>melodia2</item>
+        <item>melodia3</item>
+        <item>melodia4</item>
+        <item>melodia5</item>
+        <item>melodia6</item>
+        <item>melodia7</item>
+        <item>melodia8</item>
+        <item>melodia9</item>
+        <item>melodia10</item>
         <!-- Add more items as needed -->
     </string-array>
 

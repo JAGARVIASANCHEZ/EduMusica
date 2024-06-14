@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,17 +22,25 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity principal de la aplicación, para elegir los minijuegos.
+ */
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity"; // Definir el tag para el log
 
     FirebaseAuth auth;
     Button btn_logout, btn_melodias, btn_intervalos;
-    ImageView settingsIcon;
-    TextView tvMaxScoreMelodias, tvMaxScoreIntervalos;
+    ImageView btnAjustes;
+    TextView tvMaxPuntMelodias, tvMaxPuntIntervalos;
     FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate llamado");
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -44,45 +53,56 @@ public class MainActivity extends AppCompatActivity {
         btn_logout = findViewById(R.id.logout);
         btn_melodias = findViewById(R.id.btn_melodias);
         btn_intervalos = findViewById(R.id.btn_intervalo);
-        settingsIcon = findViewById(R.id.settings_icon);
-        tvMaxScoreMelodias = findViewById(R.id.tv_max_score_melodias);
-        tvMaxScoreIntervalos = findViewById(R.id.tv_max_score_intervalos);
+        btnAjustes = findViewById(R.id.settings_icon);
+        tvMaxPuntMelodias = findViewById(R.id.tv_max_score_melodias);
+        tvMaxPuntIntervalos = findViewById(R.id.tv_max_score_intervalos);
 
         user = auth.getCurrentUser();
 
-
-        //Comprobacion al iniciar la app de que hay un usuario logueado. En caso negativo, abrir Login
+        // Comprobación al iniciar la app de que hay un usuario logueado. En caso negativo, abrir Login
         if (user == null) {
+
+            Log.d(TAG, "Usuario no logueado, iniciando LoginActivity");
+
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         }
 
         // Mostrar las puntuaciones máximas al iniciar la activity
-        displayMaxScores();
+        mostrarPuntacionesMax();
 
-        //Boton para Juego Melodias
+        // Botón para Juego Melodías
         btn_melodias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(TAG, "Botón de juego melodías presionado");
+
                 Intent intent = new Intent(getApplicationContext(), JuegoMelodias.class);
                 startActivity(intent);
             }
         });
 
-        //Boton para JuegoIntervalos
+        // Botón para Juego Intervalos
         btn_intervalos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(TAG, "Botón de juego intervalos presionado");
+
                 Intent intent = new Intent(getApplicationContext(), JuegoIntervalos.class);
                 startActivity(intent);
             }
         });
 
-        //Cerrar sesion
+        // Cerrar sesión
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(TAG, "Botón de logout presionado");
+
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
@@ -90,66 +110,68 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Boton de dialogo de ajustes
-        settingsIcon.setOnClickListener(new View.OnClickListener() {
+        // Botón de diálogo de ajustes
+        btnAjustes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(TAG, "Botón de ajustes presionado");
+
                 showSettingsDialog();
             }
         });
     }
 
-    //Mostrar dialogo de ajustes
+    /**
+     * Muestra el diálogo de ajustes.
+     */
     private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);  //Constructor de opciones de dialogo de ajustes
-        builder.setTitle("Ajustes");   //Poner Titulo al dialogo de ajustes
-
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);  // Constructor de opciones de diálogo de ajustes
+        builder.setTitle("Ajustes");   // Poner Título al diálogo de ajustes
 
         String[] options = {"Cambiar tamaño de la fuente", "Restablecer progreso"}; // Array de Strings con opciones de ajuste
-        builder.setItems(options, new DialogInterface.OnClickListener() {           // Colocamos los Strings en el contructor de dialogo de ajustes
+        builder.setItems(options, new DialogInterface.OnClickListener() { // Colocamos los Strings en el constructor de diálogo de ajustes
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
-
                     case 0:
-                        changeFontSize(); // Cambiar el tamaño de la fuente
+                        Log.d(TAG, "Opción de cambiar tamaño de la fuente seleccionada");
+                        tamFuente(); // Cambiar el tamaño de la fuente
                         break;
-
                     case 1:
-                        resetProgress(); // Resetear el progreso del usuario
+                        Log.d(TAG, "Opción de restablecer progreso seleccionada");
+                        resetProgresoUsuario(); // Resetear el progreso del usuario
                         break;
-
-
                 }
             }
         });
 
-        builder.setNegativeButton("Cancelar", null);   //Mostrar boton de cierre de dialogo
+        builder.setNegativeButton("Cancelar", null); // Mostrar botón de cierre de diálogo
         builder.show();
     }
 
-    //Cambiar el tamaño de la fuente
-    private void changeFontSize() {
+    /**
+     * Cambia el tamaño de la fuente.
+     */
+    private void tamFuente() {
         String[] fontSizes = {"Pequeño", "Mediano", "Grande"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);  //Nuevo dialogo con las opciones de tamaño de fuente
+        AlertDialog.Builder builder = new AlertDialog.Builder(this); // Nuevo diálogo con las opciones de tamaño de fuente
         builder.setTitle("Selecciona el tamaño de la fuente");
-        builder.setItems(fontSizes, new DialogInterface.OnClickListener() {  //colocacion de opciones de tamaño de fuentes
+        builder.setItems(fontSizes, new DialogInterface.OnClickListener() { // Colocación de opciones de tamaño de fuentes
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
+            public void onClick(DialogInterface dialog, int tam) {
+                switch (tam) {
                     case 0:
-                        // Cambiar a tamaño pequeño
-                        setFontSize(0.85f);
+                        cambiarTamFuente(0.85f);
                         break;
+
                     case 1:
-                        // Cambiar a tamaño mediano
-                        setFontSize(1.0f);
+                        cambiarTamFuente(1.0f);
                         break;
+
                     case 2:
-                        // Cambiar a tamaño grande
-                        setFontSize(1.15f);
+                        cambiarTamFuente(1.15f);
                         break;
                 }
             }
@@ -158,44 +180,58 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Establece el tamaño de la fuente y recarga la actividad.
+     *
+     * @param scale Escala del tamaño de la fuente.
+     */
+    private void cambiarTamFuente(float scale) {
 
-    private void setFontSize(float scale) {
         Configuration configuration = getResources().getConfiguration();
         configuration.fontScale = scale;
         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         recreate(); // Recargar la activity para aplicar el cambio de tamaño de la fuente
     }
 
-
-
-
-    //Resetear progreso de usuario
-    private void resetProgress() {
+    /**
+     * Restablece el progreso del usuario.
+     */
+    private void resetProgresoUsuario() {
         new AlertDialog.Builder(this)
                 .setTitle("Restablecer progreso")
                 .setMessage("¿Estás seguro de que deseas restablecer tu progreso?")
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "Progreso restablecido confirmado por el usuario");
+
                         // Restablecer el progreso aquí
-                        SharedPreferences prefs = getSharedPreferences("Progress", MODE_PRIVATE);  //Llamada a Progress.xml en sharedpref
+                        SharedPreferences prefs = getSharedPreferences("Progress", MODE_PRIVATE); // Llamada a Progress.xml en sharedpref
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.clear(); // Limpiar el progreso guardado
                         editor.apply();
                         Toast.makeText(MainActivity.this, "Progreso restablecido", Toast.LENGTH_SHORT).show();
+
                         // Actualizar las vistas con las puntuaciones restablecidas
-                        displayMaxScores();
+                        mostrarPuntacionesMax();
                     }
                 })
                 .setNegativeButton("No", null)
                 .show();
     }
 
-    private void displayMaxScores() {
-        SharedPreferences prefs = getSharedPreferences("Progress", MODE_PRIVATE);               //Llamada a Progress.xml en sharedpref una vez más, para mostrar las puntuaciones máximas
+    /**
+     * Muestra las puntuaciones máximas guardadas.
+     */
+    private void mostrarPuntacionesMax() {
+
+        Log.d(TAG, "Mostrando puntuaciones máximas");
+
+        SharedPreferences prefs = getSharedPreferences("Progress", MODE_PRIVATE); // Llamada a Progress.xml en sharedpref una vez más, para mostrar las puntuaciones máximas
         int maxScoreMelodias = prefs.getInt("maxScoreMelodias", 0);
         int maxScoreIntervalos = prefs.getInt("maxScoreIntervalos", 0);
-        tvMaxScoreMelodias.setText("Puntuación máxima de melodías: " + maxScoreMelodias + "/" + JuegoMelodias.TOTAL_QUESTIONS);
-        tvMaxScoreIntervalos.setText("Puntuación máxima de intervalos: " + maxScoreIntervalos + "/" + JuegoIntervalos.TOTAL_QUESTIONS);
+        tvMaxPuntMelodias.setText("Puntuación máxima de melodías: " + maxScoreMelodias + "/" + JuegoMelodias.TOTAL_PREGUNTAS);
+        tvMaxPuntIntervalos.setText("Puntuación máxima de intervalos: " + maxScoreIntervalos + "/" + JuegoIntervalos.TOTAL_PREGUNTAS);
     }
 }

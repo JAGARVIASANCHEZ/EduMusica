@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:contentDescription="Melody Image" />
+        android:contentDescription="@string/imagen_melodia" />
 
     <TextView
         android:id="@+id/scoreText"
@@ -60,7 +60,7 @@
     </GridLayout>
 
     <Button
-        android:id="@+id/resolveButton"
+        android:id="@+id/btnResolver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/answerGrid"
@@ -69,10 +69,10 @@
         android:text="@string/resolver" />
 
     <Button
-        android:id="@+id/nextButton"
+        android:id="@+id/btnSiguiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/resolveButton"
+        android:layout_below="@+id/btnResolver"
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true"
         android:text="@string/siguiente"
@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/nextButton"
+        android:layout_below="@+id/btnSiguiente"
         android:text="@string/pregunta"
         android:textSize="18sp"
         android:layout_marginTop="16dp"

@@ -1,11 +1,10 @@
 package com.example.edumusicav2;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,171 +14,215 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity para el juego de identificación de melodías.
+ */
 public class JuegoMelodias extends AppCompatActivity {
 
-    private ImageView melodyImage;
-    private Button button1, button2, button3, button4, resolveButton, nextButton;
-    private TextView scoreText, questionCounterText;
+    private static final String TAG = "JuegoMelodias"; // Definir el tag para el log
 
-    private int selectedMelody = -1;
-    private int correctMelody = -1;
-    private int score = 0;
-    private int questionCounter = 0;
-    public static final int TOTAL_QUESTIONS = 10;
+    private ImageView imgMelodia;
+    private Button button1, button2, button3, button4, btnResolver, btnSiguiente;
+    private TextView tvPuntuacion, tvContadorPreguntas;
 
-    private List<Integer> melodyAudioIds;
-    private List<Integer> melodyImageIds;
+    private int melodiaElegida = -1;
+    private int melodyCorrecta = -1;
+    private int puntuacion = 0;
+    private int contadorPreguntas = 0;
+    public static final int TOTAL_PREGUNTAS = 10;
 
+    private List<Integer> idAudiosMelodias;
+    private List<Integer> idImagenMelodias;
+
+    /**
+     * Método llamado cuando la actividad es creada.
+     *
+     * @param savedInstanceState Estado guardado de la instancia anterior.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate llamado");
         setContentView(R.layout.activity_juego_melodias);
 
-        melodyImage = findViewById(R.id.melodyImage);
-        scoreText = findViewById(R.id.scoreText);
-        questionCounterText = findViewById(R.id.questionCounterText);
+        imgMelodia = findViewById(R.id.melodyImage);
+        tvPuntuacion = findViewById(R.id.scoreText);
+        tvContadorPreguntas = findViewById(R.id.questionCounterText);
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
-        resolveButton = findViewById(R.id.resolveButton);
-        nextButton = findViewById(R.id.nextButton);
+        btnResolver = findViewById(R.id.btnResolver);
+        btnSiguiente = findViewById(R.id.btnSiguiente);
 
-        loadMelodyResources();
-        setNewQuestion();
+        cargarRecursosMelodias();
+        siguientePregunta();
 
         button1.setOnClickListener(v -> {
-            playMelody(0);
-            highlightButton(button1);
+            repMelodia(0);
+            resaltarBoton(button1);
         });
         button2.setOnClickListener(v -> {
-            playMelody(1);
-            highlightButton(button2);
+            repMelodia(1);
+            resaltarBoton(button2);
         });
         button3.setOnClickListener(v -> {
-            playMelody(2);
-            highlightButton(button3);
+            repMelodia(2);
+            resaltarBoton(button3);
         });
         button4.setOnClickListener(v -> {
-            playMelody(3);
-            highlightButton(button4);
+            repMelodia(3);
+            resaltarBoton(button4);
         });
 
-        resolveButton.setOnClickListener(v -> checkAnswer());
-        nextButton.setOnClickListener(v -> setNewQuestion());
+        btnResolver.setOnClickListener(v -> checkRespuesta());
+        btnSiguiente.setOnClickListener(v -> siguientePregunta());
     }
 
-    private void loadMelodyResources() {
+    /**
+     * Carga los recursos de melodías y sus imágenes correspondientes.
+     */
+    private void cargarRecursosMelodias() {
+
+        Log.d(TAG, "Cargando recursos de melodías");
+
         Resources res = getResources();
         String packageName = getPackageName();
 
-        String[] melodyAudioFiles = res.getStringArray(R.array.melody_audio_files);
-        String[] melodyImageFiles = res.getStringArray(R.array.melody_image_files);
+        String[] audiosMelodias = res.getStringArray(R.array.audios_melodias);
+        String[] imgMelodias = res.getStringArray(R.array.imagenes_melodias);
 
-        melodyAudioIds = new ArrayList<>();
-        melodyImageIds = new ArrayList<>();
+        idAudiosMelodias = new ArrayList<>();
+        idImagenMelodias = new ArrayList<>();
 
-        for (String audioFile : melodyAudioFiles) {
-            int audioId = res.getIdentifier(audioFile, "raw", packageName);
+        for (String audio : audiosMelodias) {
+            int audioId = res.getIdentifier(audio, "raw", packageName);
             if (audioId != 0) {
-                melodyAudioIds.add(audioId);
+                idAudiosMelodias.add(audioId);
             }
         }
 
-        for (String imageFile : melodyImageFiles) {
+        for (String imageFile : imgMelodias) {
             int imageId = res.getIdentifier(imageFile, "drawable", packageName);
             if (imageId != 0) {
-                melodyImageIds.add(imageId);
+                idImagenMelodias.add(imageId);
             }
         }
     }
 
-    private void setNewQuestion() {
-        if (questionCounter >= TOTAL_QUESTIONS) {
-            GameUtils.endGame(this, score, "Melodias");
+    /**
+     * Establece una nueva pregunta con una melodía y opciones aleatorias.
+     */
+    private void siguientePregunta() {
+        Log.d(TAG, "Estableciendo nueva pregunta");
+        if (contadorPreguntas >= TOTAL_PREGUNTAS) {
+            GameUtils.finJuego(this, puntuacion, "Melodias");
             return;
         }
 
-        List<Integer> randomIndices = GameUtils.shuffleList(melodyAudioIds.size());
-        correctMelody = randomIndices.get(0);
+        List<Integer> randomIndices = GameUtils.randomizarListaEnteros(idAudiosMelodias.size());
+        melodyCorrecta = randomIndices.get(0);
 
-        melodyImage.setImageResource(melodyImageIds.get(correctMelody));
+        imgMelodia.setImageResource(idImagenMelodias.get(melodyCorrecta));
 
-        List<Integer> buttonTags = GameUtils.shuffleList(4);
+        List<Integer> buttonTags = GameUtils.randomizarListaEnteros(4);
         button1.setTag(randomIndices.get(buttonTags.get(0)));
         button2.setTag(randomIndices.get(buttonTags.get(1)));
         button3.setTag(randomIndices.get(buttonTags.get(2)));
         button4.setTag(randomIndices.get(buttonTags.get(3)));
 
-        GameUtils.resetButtonStyles(button1, button2, button3, button4);
-        GameUtils.enableButtons(true, button1, button2, button3, button4, resolveButton);
-        nextButton.setEnabled(false);
-        selectedMelody = -1;
-        questionCounter++;
-        questionCounterText.setText("Pregunta: " + questionCounter + "/" + TOTAL_QUESTIONS);
+        GameUtils.resetBoton(button1, button2, button3, button4);
+        GameUtils.activarBoton(true, button1, button2, button3, button4, btnResolver);
+        btnSiguiente.setEnabled(false);
+        melodiaElegida = -1;
+        contadorPreguntas++;
+        tvContadorPreguntas.setText("Pregunta: " + contadorPreguntas + "/" + TOTAL_PREGUNTAS);
     }
 
-    private void playMelody(int index) {
-        int melody;
+    /**
+     * Reproduce la melodía seleccionada.
+     *
+     * @param index Índice del botón seleccionado.
+     */
+    private void repMelodia(int index) {
+
+        Log.d(TAG, "Reproduciendo melodía del botón " + index);
+
+        int melodia;
         switch (index) {
             case 0:
-                melody = (int) button1.getTag();
+                melodia = (int) button1.getTag();
                 break;
             case 1:
-                melody = (int) button2.getTag();
+                melodia = (int) button2.getTag();
                 break;
             case 2:
-                melody = (int) button3.getTag();
+                melodia = (int) button3.getTag();
                 break;
             case 3:
-                melody = (int) button4.getTag();
+                melodia = (int) button4.getTag();
                 break;
             default:
                 return;
         }
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, melodyAudioIds.get(melody));
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, idAudiosMelodias.get(melodia));
         mediaPlayer.start();
-        selectedMelody = melody;
+        melodiaElegida = melodia;
     }
 
-    private void checkAnswer() {
-        if (selectedMelody == -1) {
+    /**
+     * Verifica si la respuesta seleccionada es correcta y actualiza la puntuación.
+     */
+    private void checkRespuesta() {
+
+        Log.d(TAG, "Verificando respuesta");
+
+        if (melodiaElegida == -1) {
             Toast.makeText(this, "Selecciona una melodía primero", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        boolean isCorrect = selectedMelody == correctMelody;
+        boolean correcta;
 
-        Button selectedButton;
-        if (selectedMelody == (int) button1.getTag()) {
-            selectedButton = button1;
-        } else if (selectedMelody == (int) button2.getTag()) {
-            selectedButton = button2;
-        } else if (selectedMelody == (int) button3.getTag()) {
-            selectedButton = button3;
+        correcta = melodiaElegida == melodyCorrecta;
+
+        Button btnElegido;
+        if (melodiaElegida == (int) button1.getTag()) {
+            btnElegido = button1;
+        } else if (melodiaElegida == (int) button2.getTag()) {
+            btnElegido = button2;
+        } else if (melodiaElegida == (int) button3.getTag()) {
+            btnElegido = button3;
         } else {
-            selectedButton = button4;
+            btnElegido = button4;
         }
 
-        selectedButton.setBackgroundColor(isCorrect ? Color.GREEN : Color.RED);
-        Button correctButton = GameUtils.getButtonByTag(button1, button2, button3, button4, correctMelody);
-        if (correctButton != null) {
-            correctButton.setBackgroundColor(Color.GREEN);
+        btnElegido.setBackgroundColor(correcta ? Color.GREEN : Color.RED);
+        Button btnCorrecto = GameUtils.identificarBoton(button1, button2, button3, button4, melodyCorrecta);
+        if (btnCorrecto != null) {
+            btnCorrecto.setBackgroundColor(Color.GREEN);
         }
 
-        if (isCorrect) {
-            score++;
+        if (correcta) {
+            puntuacion++;
         }
-        scoreText.setText("Puntuación: " + score + "/" + TOTAL_QUESTIONS);
+        tvPuntuacion.setText("Puntuación: " + puntuacion + "/" + TOTAL_PREGUNTAS);
 
-        GameUtils.saveMaxScore(this, score, "Melodias");
+        GameUtils.guardarMaxPuntuacion(this, puntuacion, "Melodias");
 
-        GameUtils.enableButtons(false, button1, button2, button3, button4, resolveButton);
-        nextButton.setEnabled(true);
+        GameUtils.activarBoton(false, button1, button2, button3, button4, btnResolver);
+        btnSiguiente.setEnabled(true);
     }
 
-    private void highlightButton(Button button) {
-        GameUtils.resetButtonStyles(button1, button2, button3, button4);
+    /**
+     * Resalta el botón seleccionado.
+     *
+     * @param button Botón seleccionado.
+     */
+    private void resaltarBoton(Button button) {
+        Log.d(TAG, "Resaltando botón seleccionado");
+        GameUtils.resetBoton(button1, button2, button3, button4);
         button.setBackgroundColor(Color.BLUE);
     }
 }

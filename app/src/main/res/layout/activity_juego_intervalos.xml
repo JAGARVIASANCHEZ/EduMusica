@@ -7,7 +7,7 @@
     android:background="@drawable/background_image">
 
     <TextView
-        android:id="@+id/questionText"
+        android:id="@+id/textPregunta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -19,7 +19,7 @@
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/questionText"
+        android:layout_below="@+id/textPregunta"
         android:layout_marginTop="30dp"
         android:alignmentMode="alignMargins"
         android:columnCount="2"
@@ -61,7 +61,7 @@
     </GridLayout>
 
     <Button
-        android:id="@+id/playScaleButton"
+        android:id="@+id/btnEscala"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/gridLayout"
@@ -71,20 +71,20 @@
         android:text="Escala" />
 
     <Button
-        android:id="@+id/playIntervalButton"
+        android:id="@+id/btnIntervalo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/gridLayout"
-        android:layout_toEndOf="@id/playScaleButton"
+        android:layout_toEndOf="@+id/btnEscala"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:text="Intervalo" />
 
     <Button
-        android:id="@+id/nextButton"
+        android:id="@+id/btnSiguiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playIntervalButton"
+        android:layout_below="@+id/btnIntervalo"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="58dp"
         android:layout_marginEnd="33dp"
@@ -94,11 +94,11 @@
         android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/playScaleButton"
+        android:layout_below="@+id/btnEscala"
         android:layout_alignParentStart="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
-        android:text="Puntuación: 0"
+        android:text="@string/puntuaci_n_0"
         android:textSize="18sp" />
 
 </RelativeLayout>

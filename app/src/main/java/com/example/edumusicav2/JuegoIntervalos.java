@@ -1,13 +1,12 @@
 package com.example.edumusicav2;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,60 +15,73 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Actividad para el juego de identificacion de intervalos.
+ */
 public class JuegoIntervalos extends AppCompatActivity {
 
-    public static final int TOTAL_QUESTIONS = 8;
+    public static final int TOTAL_PREGUNTAS = 8;
 
-    private TextView questionText, scoreText;
-    private Button button1, button2, button3, button4, nextButton, playScaleButton, playIntervalButton;
+    private static final String TAG = "JuegoIntervalos";
+
+    private TextView tvPregunta, tvPuntuacion;
+    private Button button1, button2, button3, button4, btnSiguiente, btnEscala, btnIntervalo;
 
     private List<PreguntaIntervalo> preguntaIntervalos;
-    private int currentQuestionIndex = 0;
-    private int score = 0;
+    private int intPreguntaActual = 0;
+    private int puntuacion = 0;
     private MediaPlayer mediaPlayer;
 
+    /**
+     * Método llamado cuando se crea la actividad.
+     *
+     * @param savedInstanceState Estado guardado de la instancia anterior.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_juego_intervalos);
 
-        questionText = findViewById(R.id.questionText);
-        scoreText = findViewById(R.id.scoreText);
+        tvPregunta = findViewById(R.id.textPregunta);
+        tvPuntuacion = findViewById(R.id.scoreText);
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
-        nextButton = findViewById(R.id.nextButton);
-        playScaleButton = findViewById(R.id.playScaleButton);
-        playIntervalButton = findViewById(R.id.playIntervalButton);
+        btnSiguiente = findViewById(R.id.btnSiguiente);
+        btnEscala = findViewById(R.id.btnEscala);
+        btnIntervalo = findViewById(R.id.btnIntervalo);
 
         // Inicializar las preguntas
-        initializeQuestions();
+        builderPregunta();
 
         // Mostrar la primera pregunta
-        showQuestion();
+        showPregunta();
 
         // Configurar oyentes de botones
         button1.setOnClickListener(view -> checkAnswer(button1));
         button2.setOnClickListener(view -> checkAnswer(button2));
         button3.setOnClickListener(view -> checkAnswer(button3));
         button4.setOnClickListener(view -> checkAnswer(button4));
-        nextButton.setOnClickListener(view -> nextQuestion());
-        playScaleButton.setOnClickListener(view -> playScale());
-        playIntervalButton.setOnClickListener(view -> playInterval());
+        btnSiguiente.setOnClickListener(view -> siguientePregunta());
+        btnEscala.setOnClickListener(view -> reprodEscala());
+        btnIntervalo.setOnClickListener(view -> reprodIntervalo());
     }
 
-    private void initializeQuestions() {
+    /**
+     * Crea las preguntas del juego.
+     */
+    private void builderPregunta() {
         preguntaIntervalos = new ArrayList<>();
         String[] respuestasArray = getResources().getStringArray(R.array.respuestas_intervalos);
         String[] audiosArray = getResources().getStringArray(R.array.audios_intervalos);
 
         Random random = new Random();
 
-        for (int i = 0; i < TOTAL_QUESTIONS; i++) {
-            int randomIndex = random.nextInt(audiosArray.length);
-            String respuestaCorrecta = respuestasArray[randomIndex];
-            String audioNombre = audiosArray[randomIndex];
+        for (int i = 0; i < TOTAL_PREGUNTAS; i++) {
+            int indexRandom = random.nextInt(audiosArray.length);
+            String respuestaCorrecta = respuestasArray[indexRandom];
+            String audioNombre = audiosArray[indexRandom];
 
             List<String> opciones = new ArrayList<>();
             opciones.add(respuestaCorrecta);
@@ -86,74 +98,111 @@ public class JuegoIntervalos extends AppCompatActivity {
         }
 
         Collections.shuffle(preguntaIntervalos);
+
+        Log.d(TAG, "Preguntas creadas.");
     }
 
-    private void showQuestion() {
-        resetButtons();
-        if (currentQuestionIndex < preguntaIntervalos.size()) {
-            PreguntaIntervalo currentPreguntaIntervalo = preguntaIntervalos.get(currentQuestionIndex);
+    /**
+     * Muestra la pregunta actual.
+     */
+    private void showPregunta() {
+        resetBotones();
+        if (intPreguntaActual < preguntaIntervalos.size()) {
+            PreguntaIntervalo currentPreguntaIntervalo = preguntaIntervalos.get(intPreguntaActual);
 
-            questionText.setText("Escucha el intervalo");
+            tvPregunta.setText("Escucha el intervalo");
 
-            String[] choices = currentPreguntaIntervalo.getChoices();
+            String[] choices = currentPreguntaIntervalo.getOpciones();
             button1.setText(choices[0]);
             button2.setText(choices[1]);
             button3.setText(choices[2]);
             button4.setText(choices[3]);
 
-            playInterval();
+            reprodIntervalo();
+            Log.d(TAG, "Pregunta mostrada: " + intPreguntaActual);
         } else {
-            GameUtils.endGame(this, score, "Intervalos");
+            GameUtils.finJuego(this, puntuacion, "Intervalos");
+            Log.d(TAG, "Juego terminado.");
         }
     }
 
+    /**
+     * Verifica la respuesta seleccionada por el usuario.
+     *
+     * @param selectedButton El botón seleccionado por el usuario.
+     */
     private void checkAnswer(Button selectedButton) {
-        PreguntaIntervalo currentPreguntaIntervalo = preguntaIntervalos.get(currentQuestionIndex);
+        PreguntaIntervalo currentPreguntaIntervalo = preguntaIntervalos.get(intPreguntaActual);
         String selectedAnswer = selectedButton.getText().toString();
-        String correctAnswer = currentPreguntaIntervalo.getCorrectAnswer();
+        String correctAnswer = currentPreguntaIntervalo.getOpcionCorrecta();
 
+        boolean correcta;
         if (selectedAnswer.equals(correctAnswer)) {
-            score++;
-            selectedButton.setBackgroundColor(Color.GREEN);
+            correcta = true;
+        } else {
+            correcta = false;
+        }
 
+        if (correcta) {
+            puntuacion++;
+            selectedButton.setBackgroundColor(Color.GREEN);
+            Log.d(TAG, "Respuesta correcta.");
         } else {
             selectedButton.setBackgroundColor(Color.RED);
-            GameUtils.highlightCorrectAnswer(button1, button2, button3, button4, correctAnswer);
+            GameUtils.resaltarRespuestaCorrecta(button1, button2, button3, button4, correctAnswer);
+            Log.d(TAG, "Respuesta incorrecta.");
         }
 
-        scoreText.setText("Puntuación: " + score + "/" + TOTAL_QUESTIONS);
-        GameUtils.saveMaxScore(this, score, "Intervalos");
-        GameUtils.enableButtons(false, button1, button2, button3, button4);
+        tvPuntuacion.setText("Puntuación: " + puntuacion + "/" + TOTAL_PREGUNTAS);
+        GameUtils.guardarMaxPuntuacion(this, puntuacion, "Intervalos");
+        GameUtils.activarBoton(false, button1, button2, button3, button4);
     }
 
-    private void resetButtons() {
+    /**
+     * Reinicia los botones de respuesta a su estado inicial.
+     */
+    private void resetBotones() {
         button1.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
         button2.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
         button3.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
         button4.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-        GameUtils.enableButtons(true, button1, button2, button3, button4);
+        GameUtils.activarBoton(true, button1, button2, button3, button4);
+        Log.d(TAG, "Botones reiniciados.");
     }
 
-    private void nextQuestion() {
-        currentQuestionIndex++;
-        showQuestion();
+    /**
+     * Muestra la siguiente pregunta.
+     */
+    private void siguientePregunta() {
+        intPreguntaActual++;
+        showPregunta();
     }
 
-    private void playScale() {
+    /**
+     * Reproduce la escala mayor.
+     */
+    private void reprodEscala() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
         mediaPlayer = MediaPlayer.create(this, R.raw.escala_mayor);
         mediaPlayer.start();
+
+        Log.d(TAG, "Escala mayor reproducida.");
     }
 
-    private void playInterval() {
+    /**
+     * Reproduce el intervalo del ejercicio actual.
+     */
+    private void reprodIntervalo() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-        String audioNombre = preguntaIntervalos.get(currentQuestionIndex).getAudioName();
+        String audioNombre = preguntaIntervalos.get(intPreguntaActual).getNombreAudio();
         @SuppressLint("DiscouragedApi") int resID = getResources().getIdentifier(audioNombre, "raw", getPackageName());
         mediaPlayer = MediaPlayer.create(this, resID);
         mediaPlayer.start();
+
+        Log.d(TAG, "Intervalo reproducido: " + audioNombre);
     }
 }
