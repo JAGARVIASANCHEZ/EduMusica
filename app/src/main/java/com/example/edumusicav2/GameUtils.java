@@ -38,7 +38,7 @@ public class GameUtils {
     }
 
     /**
-     * Guarda la puntuación máxima si es mayor que la actual.
+     * Guarda la puntuación máxima si es mayor que la actual. Hace uso de un objeto SharedPreferences.Editor para guardar una nueva máxima puntuación
      *
      * @param context   Contexto de la aplicación.
      * @param nuevaPuntuacion  Nueva puntuación.

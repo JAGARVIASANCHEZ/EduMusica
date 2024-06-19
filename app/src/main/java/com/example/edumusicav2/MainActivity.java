@@ -123,7 +123,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Muestra el diálogo de ajustes.
+     * Muestra el diálogo de ajustes. -
+     * Para construir el diálogo de ajuste, se invoca al método setItems y se le pasan los parámetros options(array de strings con las opciones)
+     * y onClickListener (de las mismas).
+     *
      */
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);  // Constructor de opciones de diálogo de ajustes
@@ -147,12 +150,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         builder.setNegativeButton("Cancelar", null); // Mostrar botón de cierre de diálogo
         builder.show();
     }
 
     /**
      * Cambia el tamaño de la fuente.
+     * Usamos la misma metodología
+     * de setItems para este método, es decir,
+     * pasándole un array de strings de opciones
+     * y un new onClickListener con un switch
      */
     private void tamFuente() {
         String[] fontSizes = {"Pequeño", "Mediano", "Grande"};
@@ -194,7 +203,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Restablece el progreso del usuario.
+     * Restablece el progreso del usuario. Hacemos uso de
+     * las SharedPreferences para guardar nuestro
+     * progreso de usuario
      */
     private void resetProgresoUsuario() {
         new AlertDialog.Builder(this)

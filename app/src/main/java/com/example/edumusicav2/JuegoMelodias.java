@@ -1,5 +1,6 @@
 package com.example.edumusicav2;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -95,14 +96,14 @@ public class JuegoMelodias extends AppCompatActivity {
         idImagenMelodias = new ArrayList<>();
 
         for (String audio : audiosMelodias) {
-            int audioId = res.getIdentifier(audio, "raw", packageName);
+            @SuppressLint("DiscouragedApi") int audioId = res.getIdentifier(audio, "raw", packageName);
             if (audioId != 0) {
                 idAudiosMelodias.add(audioId);
             }
         }
 
         for (String imageFile : imgMelodias) {
-            int imageId = res.getIdentifier(imageFile, "drawable", packageName);
+            @SuppressLint("DiscouragedApi") int imageId = res.getIdentifier(imageFile, "drawable", packageName);
             if (imageId != 0) {
                 idImagenMelodias.add(imageId);
             }
