@@ -27,7 +27,7 @@ public class JuegoIntervalos extends AppCompatActivity {
     private TextView tvPregunta, tvPuntuacion;
     private Button button1, button2, button3, button4, btnSiguiente, btnEscala, btnIntervalo;
 
-    private List<PreguntaIntervalo> preguntaIntervalos;
+    private List<PreguntasIntervalo> preguntasIntervalos;
     private int intPreguntaActual = 0;
     private int puntuacion = 0;
     private MediaPlayer mediaPlayer;
@@ -72,7 +72,7 @@ public class JuegoIntervalos extends AppCompatActivity {
      * Crea las preguntas del juego.
      */
     private void builderPregunta() {
-        preguntaIntervalos = new ArrayList<>();
+        preguntasIntervalos = new ArrayList<>();
         String[] respuestasArray = getResources().getStringArray(R.array.respuestas_intervalos);
         String[] audiosArray = getResources().getStringArray(R.array.audios_intervalos);
 
@@ -94,10 +94,10 @@ public class JuegoIntervalos extends AppCompatActivity {
             }
 
             Collections.shuffle(opciones);
-            preguntaIntervalos.add(new PreguntaIntervalo(audioNombre, opciones.toArray(new String[0]), respuestaCorrecta));
+            preguntasIntervalos.add(new PreguntasIntervalo(audioNombre, opciones.toArray(new String[0]), respuestaCorrecta));
         }
 
-        Collections.shuffle(preguntaIntervalos);
+        Collections.shuffle(preguntasIntervalos);
 
         Log.d(TAG, "Preguntas creadas.");
     }
@@ -107,12 +107,12 @@ public class JuegoIntervalos extends AppCompatActivity {
      */
     private void showPregunta() {
         resetBotones();
-        if (intPreguntaActual < preguntaIntervalos.size()) {
-            PreguntaIntervalo currentPreguntaIntervalo = preguntaIntervalos.get(intPreguntaActual);
+        if (intPreguntaActual < preguntasIntervalos.size()) {
+            PreguntasIntervalo currentPreguntasIntervalo = preguntasIntervalos.get(intPreguntaActual);
 
             tvPregunta.setText("Escucha el intervalo");
 
-            String[] choices = currentPreguntaIntervalo.getOpciones();
+            String[] choices = currentPreguntasIntervalo.getOpciones();
             button1.setText(choices[0]);
             button2.setText(choices[1]);
             button3.setText(choices[2]);
@@ -132,9 +132,9 @@ public class JuegoIntervalos extends AppCompatActivity {
      * @param selectedButton El botón seleccionado por el usuario.
      */
     private void checkAnswer(Button selectedButton) {
-        PreguntaIntervalo currentPreguntaIntervalo = preguntaIntervalos.get(intPreguntaActual);
+        PreguntasIntervalo currentPreguntasIntervalo = preguntasIntervalos.get(intPreguntaActual);
         String selectedAnswer = selectedButton.getText().toString();
-        String correctAnswer = currentPreguntaIntervalo.getOpcionCorrecta();
+        String correctAnswer = currentPreguntasIntervalo.getOpcionCorrecta();
 
         boolean correcta;
         if (selectedAnswer.equals(correctAnswer)) {
@@ -198,7 +198,7 @@ public class JuegoIntervalos extends AppCompatActivity {
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-        String audioNombre = preguntaIntervalos.get(intPreguntaActual).getNombreAudio();
+        String audioNombre = preguntasIntervalos.get(intPreguntaActual).getNombreAudio();
         @SuppressLint("DiscouragedApi") int resID = getResources().getIdentifier(audioNombre, "raw", getPackageName());
         mediaPlayer = MediaPlayer.create(this, resID);
         mediaPlayer.start();
